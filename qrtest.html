@@ -18,6 +18,12 @@
         height: 300px;
       }
 
+      #reader video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
       #restartBtn {
         margin-top: 1rem;
         padding: 8px 16px;
@@ -28,7 +34,13 @@
   </head>
   <body>
     <h2>QR 코드 스캔</h2>
-    <div id="reader"></div>
+    <div id="reader" style="
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4 / 3;
+  margin: 0 auto;
+"></div>
+
     <p id="result">결과: 없음</p>
     <button id="restartBtn">다시</button>
 
@@ -66,5 +78,6 @@
     </script>
   </body>
 </html>
+
 
 
