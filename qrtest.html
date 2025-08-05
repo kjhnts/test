@@ -1,37 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
   <head>
+    <meta charset="UTF-8" />
     <title>QR 스캐너</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        padding: 1rem;
+      }
+
+      #reader {
+        margin: 0 auto;
+        width: 300px;
+        height: 300px;
+      }
+
+      #restartBtn {
+        margin-top: 1rem;
+        padding: 8px 16px;
+        font-size: 16px;
+        display: none;
+      }
+    </style>
   </head>
   <body>
     <h2>QR 코드 스캔</h2>
-    <div id="reader" style="width: 300px; height: 300px;"></div>
+    <div id="reader"></div>
     <p id="result">결과: 없음</p>
+    <button id="restartBtn">다시</button>
 
-    <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-      const qrRegionId = "reader";
-      const resultElement = document.getElementById("result");
+      const readerId = "reader";
+      const resultEl = document.getElementById("result");
+      const restartBtn = document.getElementById("restartBtn");
 
-      const qrScanner = new Html5Qrcode(qrRegionId);
+      const qrScanner = new Html5Qrcode(readerId);
 
-      qrScanner.start(
-        { facingMode: "environment" }, // 후면 카메라 사용
-        {
-          fps: 10,
-          qrbox: 250,
-        },
-        (decodedText, decodedResult) => {
-          console.log("QR 코드 내용:", decodedText);
-          resultElement.textContent = "결과: " + decodedText;
-          qrScanner.stop(); // 인식 성공 시 멈춤
-        },
-        (errorMessage) => {
-          // 인식 실패 시에도 반복되므로 너무 많이 출력하지 마세요
-          // console.warn("인식 실패:", errorMessage);
-        }
-      );
+      function startScanner() {
+        resultEl.textContent = "결과: 없음";
+        restartBtn.style.display = "none";
+
+        qrScanner.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: 250 },
+          (decodedText) => {
+            resultEl.textContent = "결과: " + decodedText;
+            qrScanner.stop();
+            restartBtn.style.display = "inline-block";
+          },
+          (error) => {
+            // 인식 실패 무시
+          }
+        );
+      }
+
+      restartBtn.addEventListener("click", () => {
+        startScanner();
+      });
+
+      // 최초 실행
+      startScanner();
     </script>
   </body>
 </html>
+
