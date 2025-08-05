@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>QR 스캐너</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <h2>QR 코드 스캔</h2>
+    <div id="reader" style="width: 300px; height: 300px;"></div>
+    <p id="result">결과: 없음</p>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+      const qrRegionId = "reader";
+      const resultElement = document.getElementById("result");
+
+      const qrScanner = new Html5Qrcode(qrRegionId);
+
+      qrScanner.start(
+        { facingMode: "environment" }, // 후면 카메라 사용
+        {
+          fps: 10,
+          qrbox: 250,
+        },
+        (decodedText, decodedResult) => {
+          console.log("QR 코드 내용:", decodedText);
+          resultElement.textContent = "결과: " + decodedText;
+          qrScanner.stop(); // 인식 성공 시 멈춤
+        },
+        (errorMessage) => {
+          // 인식 실패 시에도 반복되므로 너무 많이 출력하지 마세요
+          // console.warn("인식 실패:", errorMessage);
+        }
+      );
+    </script>
+  </body>
+</html>
